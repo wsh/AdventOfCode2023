@@ -5,11 +5,13 @@ from dataclasses import dataclass
 from enum import Enum
 from functools import reduce
 
-Color = Enum('Color', ['RED', 'GREEN', 'BLUE'])
+Color = Enum("Color", ["RED", "GREEN", "BLUE"])
+
 
 class ColorMap(UserDict[Color, int]):
     def power(self) -> int:
-        return reduce(lambda x, y: x*y, self.data.values(), 1)
+        return reduce(lambda x, y: x * y, self.data.values(), 1)
+
 
 @dataclass
 class Game:
@@ -18,7 +20,7 @@ class Game:
 
     @staticmethod
     def _parse_hand(hand: str) -> ColorMap:
-        ms = re.findall(r'(\d+) (\w+)', hand)
+        ms = re.findall(r"(\d+) (\w+)", hand)
         res: ColorMap = ColorMap()
         for m in ms:
             i = int(m[0])
@@ -27,12 +29,12 @@ class Game:
         return res
 
     @staticmethod
-    def parse(line: str) -> 'Game':
-        id_match = re.match(r'Game (\d+):', line)
+    def parse(line: str) -> "Game":
+        id_match = re.match(r"Game (\d+):", line)
         if not id_match:
             raise ValueError
         game_id = int(id_match.group(1))
-        hs = line[id_match.start(1)+1:].split(";")
+        hs = line[id_match.start(1) + 1 :].split(";")
         handfuls = [Game._parse_hand(h) for h in hs]
         return Game(game_id=game_id, handfuls=handfuls)
 
@@ -42,6 +44,7 @@ class Game:
             for c, i in h.items():
                 ms[c] = max(ms[c], i)
         return ms
+
 
 out = 0
 line_in = input()

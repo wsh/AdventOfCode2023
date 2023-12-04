@@ -3,9 +3,10 @@ import re
 from dataclasses import dataclass
 from enum import Enum
 
-Color = Enum('Color', ['RED', 'GREEN', 'BLUE'])
+Color = Enum("Color", ["RED", "GREEN", "BLUE"])
 
 type ColorMap = dict[Color, int]
+
 
 @dataclass
 class Game:
@@ -20,8 +21,9 @@ class Game:
                     return False
         return True
 
+
 def parse_handful_from_game(hand: str) -> ColorMap:
-    ms = re.findall(r'(\d+) (\w+)', hand)
+    ms = re.findall(r"(\d+) (\w+)", hand)
     res: ColorMap = {}
     for m in ms:
         i = int(m[0])
@@ -29,14 +31,16 @@ def parse_handful_from_game(hand: str) -> ColorMap:
         res[c] = i
     return res
 
+
 def parse_game_from_line(line: str) -> Game:
-    id_s = re.match(r'Game (\d+):', line)
+    id_s = re.match(r"Game (\d+):", line)
     if not id_s:
         raise ValueError
     game_id = int(id_s.group(1))
-    hs = line[id_s.start(1)+1:].split(";")
+    hs = line[id_s.start(1) + 1 :].split(";")
     handfuls = [parse_handful_from_game(h) for h in hs]
     return Game(game_id=game_id, handfuls=handfuls)
+
 
 constraint: ColorMap = {Color.RED: 12, Color.GREEN: 13, Color.BLUE: 14}
 out = 0
